@@ -1,39 +1,54 @@
-// Uncomment the code below and write your tests
-// import { readFileAsynchronously, doStuffByTimeout, doStuffByInterval } from '.';
+import { doStuffByInterval, doStuffByTimeout } from '.';
+
+const callback = (): null => null;
+let interval: number;
+const timeout = (interval = 1000);
 
 describe('doStuffByTimeout', () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
-  });
+  let spyTimeout: jest.SpyInstance;
 
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  beforeAll(() => jest.useFakeTimers());
+  beforeEach(() => (spyTimeout = jest.spyOn(global, 'setTimeout')));
+  afterEach(() => jest.clearAllMocks());
+  afterAll(() => jest.useRealTimers());
 
   test('should set timeout with provided callback and timeout', () => {
-    // Write your test here
+    doStuffByTimeout(callback, timeout);
+    expect(spyTimeout).toBeCalledWith(callback, timeout);
   });
 
   test('should call callback only after timeout', () => {
-    // Write your test here
+    const mockCallback: jest.Mock = jest.fn(callback);
+
+    doStuffByTimeout(mockCallback, timeout);
+    expect(mockCallback).not.toBeCalled();
+
+    jest.advanceTimersByTime(timeout);
+    expect(mockCallback).toBeCalledTimes(1);
   });
 });
 
 describe('doStuffByInterval', () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
-  });
+  let spyInterval: jest.SpyInstance;
 
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  beforeAll(() => jest.useFakeTimers());
+  beforeEach(() => (spyInterval = jest.spyOn(global, 'setInterval')));
+  afterEach(() => jest.clearAllMocks());
+  afterAll(() => jest.useRealTimers());
 
   test('should set interval with provided callback and timeout', () => {
-    // Write your test here
+    doStuffByInterval(callback, interval);
+    expect(spyInterval).toBeCalledWith(callback, interval);
   });
 
   test('should call callback multiple times after multiple intervals', () => {
-    // Write your test here
+    const mockCallback: jest.Mock = jest.fn(callback);
+
+    doStuffByInterval(mockCallback, timeout);
+    expect(mockCallback).not.toBeCalled();
+
+    jest.advanceTimersByTime(timeout);
+    expect(mockCallback).toBeCalledTimes(1);
   });
 });
 
