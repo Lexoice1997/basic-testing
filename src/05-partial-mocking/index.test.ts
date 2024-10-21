@@ -26,3 +26,4 @@ describe('partial mocking', () => {
     expect(console.log).toHaveBeenCalledWith('I am not mocked');
   });
 });
+
