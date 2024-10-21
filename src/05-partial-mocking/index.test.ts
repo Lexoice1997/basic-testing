@@ -22,6 +22,7 @@ describe('partial mocking', () => {
   test('unmockedFunction should log into console', () => {
     jest.spyOn(console, 'log').mockImplementation((): null => null);
     unmockedFunction();
+    
     expect(console.log).toHaveBeenCalledWith('I am not mocked');
   });
 });
